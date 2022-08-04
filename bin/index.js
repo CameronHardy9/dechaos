@@ -11,57 +11,29 @@ const progressBar = new cliProgress.SingleBar(
 	{},
 	cliProgress.Presets.shades_classic
 );
-let progress = 0;
-let filesArr = [];
 
 const input = process.argv[2];
 const dir = path.resolve(process.cwd(), input);
+const files = fs.readdirSync(dir);
 
-fs.readdir(dir, (err, files) => {
-	if (err) {
-		console.log(err);
-	} else {
-		progressBar.start(files.length, 0);
-        filesArr = files;
-	}
-});
+const answer = readlineSync.question(`${files.length} file(s) will be impacted from the ${dir} filepath! Are you sure you want to continue? [yes/no] `);
 
 
-fs.readFile(filesArr[progress], (err, data) => {
-    if (err){
-            throw err;
-        }
-    else {
+if(answer.toLowerCase() === 'yes'){
+    progressBar.start(files.length, 0);
+    files.forEach((file, index) => {
+        const data = fs.readFileSync(path.resolve(dir, file));
         exif.metadata(data, ['-creationDate', '-createDate'], (err, metadata) => {
             if (err) {
-                    throw err;
+                    console.log(err);
                 }
             else {
-                    console.log(metadata);
-                    progress += 1;
-                    progressBar.update(progress);
+                progressBar.update(index + 1);
+                console.log(metadata)
                 }
         });
-    }
-});
+    })
 
-
-
-
-// if (answer === "yes") {
-// 	fs.readFile("IMG_8632 (1).mov", (err, data) => {
-// 		if (err){
-//             throw err;
-//         }
-// 		else {
-// 			exif.metadata(data, ['-creationDate', '-createDate'], (err, metadata) => {
-// 				if (err) {
-//                     throw err;
-//                 }
-// 				else {
-//                     console.log(metadata);
-//                 }
-// 			});
-// 		}
-// 	});
-// }
+} else {
+    console.log('quit');
+}
