@@ -1,21 +1,23 @@
-const readlineSync = require('readline-sync');
-const ExifImage = require('exif').ExifImage;
+const readlineSync = require("readline-sync");
+const exif = require("exiftool");
+const fs = require("fs");
 
 const answer = readlineSync.question(`Run program? [yes / no]`);
 
-if(answer === "yes"){
-    try {
-        new ExifImage({ image : '/Users/cameron/repos/Node_Repos/photo_organizer/64567092333__597C6E89-C468-4281-8415-C6858A012572.jpeg' }, function (error, exifData) {
-            if (error)
-                console.log('Error: ' + error.message);
-            else
-                console.log(exifData); // Do something with your data!
-        });
-    } catch (error) {
-        console.log('Error: ' + error.message);
-    }
+if (answer === "yes") {
+	fs.readFile("IMG_8632 (1).mov", (err, data) => {
+		if (err){
+            throw err;
+        } 
+		else {
+			exif.metadata(data, ['-creationDate', '-createDate'], (err, metadata) => {
+				if (err) {
+                    throw err;
+                }
+				else {
+                    console.log(metadata);
+                }
+			});
+		}
+	});
 }
-
-  
-
-  
