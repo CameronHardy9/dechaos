@@ -17,7 +17,8 @@ const progressBar = new cliProgress.SingleBar(
 
 const input = process.argv[2];
 const dir = path.resolve(process.cwd(), input);
-const files = fs.readdirSync(dir);
+const files = fs.readdirSync(dir).filter((item) => !(/(^|\/)\.[^\/\.]/g).test(item));
+
 
 
 if (!commandExistsSync('exiftool')) {
@@ -55,7 +56,7 @@ if(answer.toLowerCase() === 'yes'){
                 const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
                 const dateSplit = Object.values(metadata)[0].split(':');
                 const year = dateSplit[0];
-                const month = months[Math.abs(dateSplit[1])];
+                const month = months[Math.abs(dateSplit[1]) - 1];
 
                 const targetPathExists = fs.existsSync(dir);
                 const yearFolderExists = fs.existsSync(path.join(dir, year));
