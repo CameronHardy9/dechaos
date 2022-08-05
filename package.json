@@ -9,6 +9,7 @@
   "license": "ISC",
   "dependencies": {
     "cli-progress": "^3.11.2",
+    "command-exists": "^1.2.9",
     "exiftool": "^0.0.3",
     "readline-sync": "^1.4.10"
   },
