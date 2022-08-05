@@ -1,7 +1,5 @@
 #! /usr/bin/env node
 
-//NEW NAME - meta-sort?
-
 const readlineSync = require("readline-sync");
 const exif = require("exiftool");
 const fs = require("fs");
@@ -82,7 +80,8 @@ if(answer.toLowerCase() === 'yes'){
             }
         });
     })
-
+    return 0;
 } else {
     console.log('program terminated');
+    return 0;
 }
