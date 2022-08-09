@@ -25,10 +25,10 @@ if (!commandExistsSync('exiftool')) {
 };
 
 
-const answer = readlineSync.question(`\n${files.length} file(s) will be impacted from the ${dir} filepath.\nAre you sure you want to continue? [yes/no] `);
+const continueProgram = readlineSync.question(`\n${files.length} file(s) will be impacted from the ${dir} filepath.\nAre you sure you want to continue? [yes/no] `);
 
 
-if(answer.toLowerCase() === 'yes'){
+if(continueProgram.toLowerCase() === 'yes'){
     //progressBar.start(files.length, 0);
     files.forEach((file, index) => {
         const ext = path.extname(file);
