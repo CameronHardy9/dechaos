@@ -57,12 +57,12 @@ if(answer.toLowerCase() === 'yes'){
                 const month = months[Math.abs(dateSplit[1]) - 1];
 
                 const targetPathExists = fs.existsSync(dir);
-                const yearFolderExists = fs.existsSync(path.join(dir, year));
-                const monthFolderExists = fs.existsSync(path.join(dir, year, month));
+                const yearDirExists = fs.existsSync(path.join(dir, year));
+                const monthDirExists = fs.existsSync(path.join(dir, year, month));
 
                 if(targetPathExists){
-                    if(yearFolderExists){
-                        if(monthFolderExists) {
+                    if(yearDirExists){
+                        if(monthDirExists) {
                             fs.renameSync(path.join(dir, file), path.join(dir, year, month, file));
                         } else {
                             fs.mkdirSync(path.join(dir, year, month));
