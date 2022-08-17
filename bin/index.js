@@ -27,7 +27,7 @@ const continueProgram = readlineSync.question(`\n${files.length} ${files.length 
 
 
 if(continueProgram.toLowerCase() === 'yes'){
-    //progressBar.start(files.length, 0);
+    progressBar.start(files.length, 0);
 
     const promises = files.map((file) => {
         const ext = path.extname(file);
@@ -44,13 +44,11 @@ if(continueProgram.toLowerCase() === 'yes'){
             default:
                 skippedFiles.push(file);
                 skipFile = true;
+                progressBar.increment();
         };
 
         if (!skipFile) {
             return exiftool.read(path.resolve(dir, file), ["-stay_open"]).then((metadata) => {
-                const data = fs.readFileSync(`${dir}/${file}`);
-                
-                //progressBar.update(index + 1);
                 const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
                 const year = `${metadata[tag].year}`;
                 const month = months[metadata[tag].month - 1];
@@ -72,7 +70,9 @@ if(continueProgram.toLowerCase() === 'yes'){
                         fs.mkdirSync(path.join(dir, year, month));
                         fs.renameSync(path.join(dir, file), path.join(dir, year, month, file));
                     }
+                    progressBar.increment();
                 } else {
+                    progressBar.stop();
                     console.log('ERROR: Your target file path has changed\nprogram terminated');
                     return 1;
                 }
@@ -82,6 +82,7 @@ if(continueProgram.toLowerCase() === 'yes'){
 
     Promise.all(promises).finally(() => {
         exiftool.end();
+        progressBar.stop();
 
         console.log("\nSorting complete!");
         
@@ -91,7 +92,7 @@ if(continueProgram.toLowerCase() === 'yes'){
         }
         return 0;
     });
-    
+
 } else {
     console.log('Program terminated');
     return 0;
